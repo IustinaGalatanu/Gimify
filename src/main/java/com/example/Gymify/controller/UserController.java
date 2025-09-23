@@ -1,0 +1,45 @@
+package com.example.Gymify.controller;
+
+import com.example.Gymify.model.dto.UserDto;
+import com.example.Gymify.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    private final UserService userService;
+
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+        UserDto savedUserDto = userService.save(userDto);
+        return ResponseEntity.ok(savedUserDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        List<UserDto> allUsersDto = userService.findAll();
+        return ResponseEntity.ok(allUsersDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<UserDto>> getUserById(@PathVariable Long id){
+        Optional<UserDto> userByIdToDto = userService.findById(id);
+        return ResponseEntity.ok(userByIdToDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}
