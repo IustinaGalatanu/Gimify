@@ -14,6 +14,5 @@ public class ExerciseType {
     private Long id;
     private String type;
 
-//    @OneToMany(mappedBy = "exercises")
-//    private List<Exercise> exercises;
+
 }

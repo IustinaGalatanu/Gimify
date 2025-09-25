@@ -4,7 +4,7 @@ import com.example.Gymify.model.Image;
 import com.example.Gymify.model.User;
 import com.example.Gymify.model.Workout;
 import com.example.Gymify.model.dto.UserDto;
-import com.example.Gymify.model.dto.WorkoutDto;
+import com.example.Gymify.model.dto.WorkoutSummaryDto;
 import com.example.Gymify.repository.ImageRepository;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ public class UserMappper {
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
         user.setGoal(userDto.getGoal());
-        user.setWorkouts(workoutsFromDto(userDto.getWorkouts(),user));
+        user.setWorkouts(workoutsSummaryFromDto(userDto.getWorkouts(),user));
         user.setImage(imageFromDto(userDto.getImageId()));
         return user;
     }
@@ -41,50 +41,29 @@ public class UserMappper {
         return null;
     }
 
-    private List<Workout> workoutsFromDto(List<WorkoutDto> workoutDtos, User user){
+    private List<Workout> workoutsSummaryFromDto(List<WorkoutSummaryDto> workoutSummaryDtos, User user){
         // List<Workout> list = null
         // List<Workout> list = List.of(); -> []
-        if(workoutDtos!=null && !workoutDtos.isEmpty()){
-            List<Workout> workouts= workoutDtos.stream()
+        if(workoutSummaryDtos !=null && !workoutSummaryDtos.isEmpty()){
+            List<Workout> workouts= workoutSummaryDtos.stream()
                     // List<Workout> list = List.of(); -> [null, "squats", null]
-                    .filter(workoutDto -> workoutDto !=null )
-                    .map(workoutDto -> workoutFromDto(workoutDto,user))
+                    .filter(workoutSummaryDto -> workoutSummaryDto !=null )
+                    .map(workoutSummaryDto -> workoutSummaryFromDto(workoutSummaryDto,user))
                     .collect(Collectors.toList());
-            user.setWorkouts(workouts);
+
             return workouts;
         }
         return List.of();
     }
 
-    private Workout workoutFromDto(WorkoutDto workoutDto, User user){
+    private Workout workoutSummaryFromDto(WorkoutSummaryDto workoutSummaryDto, User user){
         Workout workout =new Workout();
-        workout.setId(workoutDto.getId());
-        workout.setName(workoutDto.getName());
-        workout.setCreateTimestamp(workoutDto.getCreateTimestamp());
+        workout.setId(workoutSummaryDto.getId());
+        workout.setName(workoutSummaryDto.getName());
+        workout.setCreateTimestamp(workoutSummaryDto.getCreateTimestamp());
         workout.setUser(user);
         return workout;
     }
-
-//    private List<Exercise> exercisesFromDto(List<ExerciseDto> exerciseDtos, Workout workout){
-//        if (exerciseDtos != null && !exerciseDtos.isEmpty()) {
-//            List<Exercise> exercises =exerciseDtos.stream()
-//                    .filter(e -> e != null)
-//                    .map(e -> {
-//                        Exercise ex = new Exercise();
-//                        ex.setId(e.getId());
-//                        ex.setName(e.getName());
-//                        ex.setSets(e.getSets());
-//                        ex.setRep(e.getRep());
-//                        ex.setWeight(e.getWeight());
-//                        ex.setWorkout(workout);
-//                        return ex;
-//                    })
-//                    .collect(Collectors.toList());
-//            workout.setExercises(exercises);
-//            return exercises;
-//        }
-//        return List.of();
-//    }
 
     public UserDto toDto(User user){
         UserDto userDto =new UserDto();
@@ -93,7 +72,7 @@ public class UserMappper {
         userDto.setEmail(user.getEmail());
         userDto.setPassword("****");
         userDto.setGoal(user.getGoal());
-        userDto.setWorkouts(workoutToDtos(user.getWorkouts(),userDto));
+        userDto.setWorkouts(workoutSummaryDtosToDtos(user.getWorkouts(),userDto));
         if(user.getImage()!=null) {
             userDto.setImageId(user.getImage().getId());
         }
@@ -101,38 +80,20 @@ public class UserMappper {
     }
 
 
-    private List<WorkoutDto> workoutToDtos(List<Workout> workouts, UserDto userDto){
+    private List<WorkoutSummaryDto> workoutSummaryDtosToDtos(List<Workout> workouts, UserDto userDto){
         if(workouts!=null){
-            List<WorkoutDto> workoutsDtos =workouts.stream()
+            List<WorkoutSummaryDto> workoutSummaryDtos =workouts.stream()
                     .map(workout ->{
-                        WorkoutDto workoutDto =new WorkoutDto();
-                        workoutDto.setId(workout.getId());
-                        workoutDto.setName(workout.getName());
-                        workoutDto.setCreateTimestamp(workout.getCreateTimestamp());
-                        workoutDto.setUserId(workout.getUser().getId());
-                        return workoutDto;
+                        WorkoutSummaryDto workoutSummaryDto =new WorkoutSummaryDto();
+                        workoutSummaryDto.setId(workout.getId());
+                        workoutSummaryDto.setName(workout.getName());
+                        workoutSummaryDto.setCreateTimestamp(workout.getCreateTimestamp());
+
+                        return workoutSummaryDto;
                     })
                     .collect(Collectors.toList());
-            userDto.setWorkouts(workoutsDtos);
-            return workoutsDtos;
+            return workoutSummaryDtos;
         }
         return List.of();
     }
 }
-//    private List<ExerciseDto> exerciseToDtos(List<Exercise> exercises, WorkoutDto workoutDto){
-//        if(exercises!=null && !exercises.isEmpty()){
-//            List<ExerciseDto> exerciseDtos = exercises.stream()
-//                    .map(exercise -> {
-//                        ExerciseDto exDto =new ExerciseDto();
-//                        exDto.setName(exercise.getName());
-//                        exDto.setSets(exercise.getSets());
-//                        exDto.setRep(exercise.getRep());
-//                        exDto.setWeight(exercise.getWeight());
-//                        return exDto;
-//                    })
-//                    .collect(Collectors.toList());
-//           // workoutDto.setExercises(exerciseDtos);
-//            return exerciseDtos;
-//        }
-//        return List.of();
-//    }

@@ -12,6 +12,6 @@ public class UserDto {
     private String email;
     private String password;
     private String goal;
-    private List<WorkoutDto> workouts;
+    private List<WorkoutSummaryDto> workouts;
     private Long imageId;
 }

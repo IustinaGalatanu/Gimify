@@ -5,15 +5,10 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-
 @Data
-public class WorkoutDto {
-
+public class WorkoutSummaryDto {
     private Long id;
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate createTimestamp;
-    private Long userId;
-    private List<ExerciseDto> exercises;
 }

@@ -6,6 +6,7 @@ import com.example.Gymify.model.Workout;
 import com.example.Gymify.model.dto.ExerciseDto;
 import com.example.Gymify.model.dto.UserDto;
 import com.example.Gymify.model.dto.WorkoutDto;
+import com.example.Gymify.model.dto.WorkoutSummaryDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -65,6 +66,14 @@ public class WorkoutMapper {
         workoutDto.setExercises(exerciseToDtos(workout.getExercises(),workoutDto));
         workoutDto.setUserId(workout.getUser().getId());
         return workoutDto;
+    }
+
+    public WorkoutSummaryDto toSummaryDto(Workout workout){
+        WorkoutSummaryDto workoutSummaryDto=new WorkoutSummaryDto();
+        workoutSummaryDto.setId(workout.getId());
+        workoutSummaryDto.setName(workout.getName());
+        workoutSummaryDto.setCreateTimestamp(workout.getCreateTimestamp());
+        return workoutSummaryDto;
     }
 
 

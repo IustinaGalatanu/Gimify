@@ -47,6 +47,14 @@ public class ExerciseService {
         return exerciseDtoList;
     }
 
+    public List<ExerciseDto> findExerciseByWorkoutId(Long id) {
+        List<Exercise> exerciseList=exerciseRepository.findExerciseByWorkoutId(id);
+        List<ExerciseDto> exerciseDtoList=exerciseList.stream()
+                .map(exerciseMapper::toDto)
+                .collect(Collectors.toList());
+        return exerciseDtoList;
+    }
+
     public void delete (Long id){
         exerciseRepository.deleteById(id);
     }

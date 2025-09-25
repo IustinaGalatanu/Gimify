@@ -2,9 +2,11 @@ package com.example.Gymify.controller;
 
 import com.example.Gymify.model.dto.ExerciseDto;
 import com.example.Gymify.service.ExerciseService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,12 @@ public class ExerciseController {
     public ResponseEntity<Optional<ExerciseDto>> getExerciseById(@PathVariable Long id){
         Optional<ExerciseDto> exerciseByIdToDto=exerciseService.findById(id);
         return ResponseEntity.ok(exerciseByIdToDto);
+    }
+
+    @GetMapping("/workout/{id}")
+    public ResponseEntity<List<ExerciseDto>> getExeciseByWorkoutId(@PathVariable Long id) {
+        List<ExerciseDto> exerciseByWorkoutIdDto=exerciseService.findExerciseByWorkoutId(id);
+        return ResponseEntity.ok(exerciseByWorkoutIdDto);
     }
 
     @DeleteMapping("/{id}")
