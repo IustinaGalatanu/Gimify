@@ -9,7 +9,8 @@ import java.util.List;
 public class WorkoutDto {
 
     private Long id;
-    private UserDto user;
-    private LocalDateTime localDateTime;
+    private String name;
+    private LocalDateTime createTimestamp;
+    private Long userId;
     private List<ExerciseDto> exercises;
 }

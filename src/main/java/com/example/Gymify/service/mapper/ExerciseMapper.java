@@ -1,29 +1,35 @@
 package com.example.Gymify.service.mapper;
 
 import com.example.Gymify.model.Exercise;
+import com.example.Gymify.model.Workout;
 import com.example.Gymify.model.dto.ExerciseDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ExerciseMapper {
 
-    public Exercise createFromDto(ExerciseDto dto){
+    public Exercise createFromDto(ExerciseDto exerciseDto, Workout workout){
         Exercise exercise=new Exercise();
-        exercise.setId(dto.getId());
-        exercise.setName(dto.getName());
-        exercise.setSets(dto.getSets());
-        exercise.setRep(dto.getRep());
-        exercise.setWeight(dto.getWeight());
+        exercise.setId(exerciseDto.getId());
+        exercise.setName(exerciseDto.getName());
+        exercise.setSets(exerciseDto.getSets());
+        exercise.setRep(exerciseDto.getRep());
+        exercise.setWeight(exerciseDto.getWeight());
+        exercise.setWorkout(workout);
         return exercise;
     }
 
     public ExerciseDto toDto(Exercise exercise){
-        ExerciseDto exerciseDtodto=new ExerciseDto();
-        exerciseDtodto.setId(exercise.getId());
-        exerciseDtodto.setName(exercise.getName());
-        exerciseDtodto.setSets(exercise.getSets());
-        exerciseDtodto.setRep(exercise.getRep());
-        exerciseDtodto.setWeight(exercise.getWeight());
-        return exerciseDtodto;
+        ExerciseDto exerciseDto =new ExerciseDto();
+        exerciseDto.setId(exercise.getId());
+        exerciseDto.setName(exercise.getName());
+        exerciseDto.setSets(exercise.getSets());
+        exerciseDto.setRep(exercise.getRep());
+        exerciseDto.setWeight(exercise.getWeight());
+        if (exercise.getWorkout() != null) {
+            exerciseDto.setWorkoutId(exercise.getWorkout().getId());
+        }
+
+        return exerciseDto;
     }
 }

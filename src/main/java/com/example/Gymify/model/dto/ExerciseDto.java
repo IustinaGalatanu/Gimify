@@ -1,8 +1,7 @@
 package com.example.Gymify.model.dto;
 
-import jakarta.persistence.OneToMany;
+
 import lombok.Data;
-import org.aspectj.lang.annotation.Before;
 
 @Data
 public class ExerciseDto {

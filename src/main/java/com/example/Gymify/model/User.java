@@ -2,12 +2,15 @@ package com.example.Gymify.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Data
 @Entity
 @Table(name="users")
+
 public class User {
 
     @Id
@@ -18,6 +21,10 @@ public class User {
     private String password;
     private String goal;
 
-    @OneToMany(mappedBy ="user" )
+    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL )
     private List<Workout> workouts;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="image_id")
+    private Image image;
 }

@@ -1,8 +1,10 @@
 package com.example.Gymify.service;
 
 import com.example.Gymify.model.Exercise;
+import com.example.Gymify.model.Workout;
 import com.example.Gymify.model.dto.ExerciseDto;
 import com.example.Gymify.repository.ExerciseRepository;
+import com.example.Gymify.repository.WorkoutRepository;
 import com.example.Gymify.service.mapper.ExerciseMapper;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +17,18 @@ public class ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
     private final ExerciseMapper exerciseMapper;
+    private final WorkoutRepository workoutRepository;
 
-    public ExerciseService(ExerciseRepository exerciseRepository, ExerciseMapper exerciseMapper){
+    public ExerciseService(ExerciseRepository exerciseRepository, ExerciseMapper exerciseMapper, WorkoutRepository workoutRepository){
         this.exerciseRepository=exerciseRepository;
         this.exerciseMapper = exerciseMapper;
+        this.workoutRepository = workoutRepository;
     }
 
     public ExerciseDto save(ExerciseDto exerciseDto){
-        Exercise exercise=exerciseMapper.createFromDto(exerciseDto);
+        Workout workout = workoutRepository.findById(exerciseDto.getWorkoutId())
+                .orElseThrow(() -> new RuntimeException("Workout not found"));
+        Exercise exercise=exerciseMapper.createFromDto(exerciseDto,workout);
         Exercise savedExercise=exerciseRepository.save(exercise);
         return exerciseMapper.toDto(savedExercise);
     }

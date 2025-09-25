@@ -1,7 +1,9 @@
 package com.example.Gymify.service;
 
+import com.example.Gymify.model.User;
 import com.example.Gymify.model.Workout;
 import com.example.Gymify.model.dto.WorkoutDto;
+import com.example.Gymify.repository.UserRepository;
 import com.example.Gymify.repository.WorkoutRepository;
 import com.example.Gymify.service.mapper.WorkoutMapper;
 import org.springframework.stereotype.Service;
@@ -15,14 +17,20 @@ public class WorkoutService {
 
     private final WorkoutRepository workoutRepository;
     private final WorkoutMapper workoutMapper;
+    private final UserRepository userRepository;
 
-    public WorkoutService(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper) {
+    public WorkoutService(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper, UserRepository userRepository) {
         this.workoutRepository = workoutRepository;
         this.workoutMapper = workoutMapper;
+        this.userRepository = userRepository;
     }
 
     public WorkoutDto save(WorkoutDto workoutDto){
-        Workout workout=workoutMapper.createFromDto(workoutDto);
+        Optional<User> optionalUser= userRepository.findById(workoutDto.getUserId());
+        if(optionalUser.isEmpty()) {
+            throw new RuntimeException("Could not create workout because user with id=" + workoutDto.getUserId() + " doesn't exist");
+        }
+        Workout workout=workoutMapper.createFromDto(workoutDto,optionalUser.get());
         Workout savedWorkout = workoutRepository.save(workout);
         return workoutMapper.toDto(savedWorkout);
     }

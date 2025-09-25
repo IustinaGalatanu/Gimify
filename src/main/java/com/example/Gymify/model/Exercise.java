@@ -19,4 +19,7 @@ public class Exercise {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="workout_id")
     private Workout workout;
+
+
+
 }
