@@ -37,6 +37,12 @@ public class UserController {
         return ResponseEntity.ok(userByIdToDto);
     }
 
+    @PatchMapping("{id}/image")
+    public ResponseEntity<UserDto> updateImageForUser(@PathVariable Long id, @RequestParam Long imageId) {
+        UserDto userDtoUpdate=userService.update(id,imageId);
+        return ResponseEntity.ok(userDtoUpdate);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id){
         userService.delete(id);

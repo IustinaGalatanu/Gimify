@@ -40,10 +40,23 @@ public class ExerciseController {
     }
 
     @GetMapping("/workout/{id}")
-    public ResponseEntity<List<ExerciseDto>> getExeciseByWorkoutId(@PathVariable Long id) {
+    public ResponseEntity<List<ExerciseDto>> getExerciseByWorkoutId(@PathVariable Long id) {
         List<ExerciseDto> exerciseByWorkoutIdDto=exerciseService.findExerciseByWorkoutId(id);
         return ResponseEntity.ok(exerciseByWorkoutIdDto);
     }
+
+    @PatchMapping("{id}/exercise-type")
+    public ResponseEntity<ExerciseDto> updateExerciseType(@PathVariable Long id, @RequestParam Long exerciseTypeId) {
+        ExerciseDto exerciseDtoUpdate = exerciseService.updateType(id,exerciseTypeId);
+        return ResponseEntity.ok(exerciseDtoUpdate);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ExerciseDto> updateExerciseUpdate(@PathVariable Long id, @RequestBody ExerciseDto exerciseDto) {
+        ExerciseDto exerciseDtoUpdate = exerciseService.update(id,exerciseDto);
+        return ResponseEntity.ok(exerciseDtoUpdate);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id){

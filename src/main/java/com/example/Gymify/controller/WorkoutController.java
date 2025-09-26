@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/workouts")
+@CrossOrigin("*")
 public class WorkoutController {
 
     private final WorkoutService workoutService;
@@ -40,7 +41,7 @@ public class WorkoutController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<WorkoutSummaryDto>> getWorkoutByUserIdAndDate(@PathVariable Long id, @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ResponseEntity<List<WorkoutSummaryDto>> getWorkoutByUserIdAndDate(@PathVariable Long id, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         if (date!=null){
             return ResponseEntity.ok(workoutService.findWorkoutByUserIdAndByDate(id, date));
         }else{

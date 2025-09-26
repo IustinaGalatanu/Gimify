@@ -11,7 +11,6 @@ public class Exercise {
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Long id;
-    private String name;
     private int sets;
     private int rep;
     private double weight;
@@ -20,8 +19,8 @@ public class Exercise {
     @JoinColumn(name="workout_id")
     private Workout workout;
 
-
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="exercise_type_id")
+    private ExerciseType exerciseType;
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="exerciseTypes")
+@Table(name="exercise_types")
 public class ExerciseType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

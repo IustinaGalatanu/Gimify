@@ -1,12 +1,14 @@
 package com.example.Gymify.service.mapper;
 
 import com.example.Gymify.model.Exercise;
+import com.example.Gymify.model.ExerciseType;
 import com.example.Gymify.model.User;
 import com.example.Gymify.model.Workout;
 import com.example.Gymify.model.dto.ExerciseDto;
 import com.example.Gymify.model.dto.UserDto;
 import com.example.Gymify.model.dto.WorkoutDto;
 import com.example.Gymify.model.dto.WorkoutSummaryDto;
+import com.example.Gymify.repository.ExerciseTypeRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +16,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class WorkoutMapper {
+
+    private final ExerciseTypeRepository exerciseTypeRepository;
+
+    public WorkoutMapper(ExerciseTypeRepository exerciseTypeRepository) {
+        this.exerciseTypeRepository = exerciseTypeRepository;
+    }
+
     public Workout createFromDto(WorkoutDto workoutDto, User user){
         Workout workout=new Workout();
         workout.setId(workoutDto.getId());
@@ -31,7 +40,7 @@ public class WorkoutMapper {
     public List<Exercise> exerciseFromDto(List<ExerciseDto> exerciseDto, Workout workout){
         if(exerciseDto!=null && !exerciseDto.isEmpty()){
             List<Exercise> exercises= exerciseDto.stream()
-                    .filter(exDto->exDto!=null && !exDto.getName().isBlank())
+                    .filter(exDto->exDto!=null )
                     .map(exerciseDto1 ->exerciseFromDto(exerciseDto1,workout))
                     .collect(Collectors.toList());
             workout.setExercises(exercises);
@@ -40,14 +49,16 @@ public class WorkoutMapper {
         return List.of();
     }
 
-    private Exercise exerciseFromDto (ExerciseDto exerciseDto,Workout workout){
+    private Exercise exerciseFromDto (ExerciseDto exerciseDto, Workout workout){
         Exercise exercise= new Exercise();
         exercise.setId(exerciseDto.getId());
-        exercise.setName(exerciseDto.getName());
         exercise.setSets(exerciseDto.getSets());
         exercise.setRep(exerciseDto.getRep());
         exercise.setWeight(exerciseDto.getWeight());
         exercise.setWorkout(workout);
+        ExerciseType type=exerciseTypeRepository.findById(exerciseDto.getExerciseTypeId())
+                .orElseThrow(()->new RuntimeException("ExerciseType not found"));
+        exercise.setExerciseType(type);
         return exercise;
     }
 
@@ -83,12 +94,11 @@ public class WorkoutMapper {
                     .map(exerc->{
                         ExerciseDto exerciseDto =new ExerciseDto();
                         exerciseDto.setId(exerc.getId());
-                        exerciseDto.setName(exerc.getName());
                         exerciseDto.setSets(exerc.getSets());
                         exerciseDto.setRep(exerc.getRep());
                         exerciseDto.setWeight(exerc.getWeight());
                         exerciseDto.setWorkoutId(exerc.getWorkout().getId());
-
+                        exerciseDto.setExerciseTypeId(exerc.getExerciseType().getId());
                         return exerciseDto;
                     })
                     .collect(Collectors.toList());

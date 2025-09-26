@@ -1,7 +1,9 @@
 package com.example.Gymify.service;
 
+import com.example.Gymify.model.Image;
 import com.example.Gymify.model.User;
 import com.example.Gymify.model.dto.UserDto;
+import com.example.Gymify.repository.ImageRepository;
 import com.example.Gymify.repository.UserRepository;
 import com.example.Gymify.service.mapper.UserMappper;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMappper userMappper;
+    private final ImageRepository imageRepository;
 
-    public UserService(UserRepository userRepository, UserMappper userMappper){
+    public UserService(UserRepository userRepository, UserMappper userMappper, ImageRepository imageRepository){
         this.userRepository = userRepository;
         this.userMappper = userMappper;
+        this.imageRepository = imageRepository;
     }
 
     public UserDto save(UserDto userDto) {
@@ -39,6 +43,16 @@ public class UserService {
                 .map(userMappper::toDto)
                 .collect(Collectors.toList());
         return listUserDto;
+    }
+
+    public UserDto update(Long userId, Long imageId){
+        User user=userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+        Image image = imageRepository.findById(imageId)
+                .orElseThrow(()-> new RuntimeException("Image not found"));
+        user.setImage(image);
+        User userSaved=userRepository.save(user);
+        return userMappper.toDto(userSaved);
     }
 
     public void delete(Long id) {
