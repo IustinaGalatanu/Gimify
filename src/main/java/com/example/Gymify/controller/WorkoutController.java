@@ -50,6 +50,12 @@ public class WorkoutController {
         }
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<WorkoutDto> updateWorkout(@PathVariable Long id,@RequestParam String name) {
+        WorkoutDto workoutDto=workoutService.update(id,name);
+        return ResponseEntity.ok(workoutDto);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         workoutService.delete(id);

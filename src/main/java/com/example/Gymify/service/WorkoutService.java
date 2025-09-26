@@ -71,6 +71,15 @@ public class WorkoutService {
         return listWorkoutSummaryDto;
     }
 
+    public WorkoutDto update (Long id, String name) {
+        Workout workout=workoutRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Workout not found"));
+        workout.setName(name);
+        Workout workoutUpdate=workoutRepository.save(workout);
+        return workoutMapper.toDto(workoutUpdate);
+
+    }
+
     public void delete(Long id){
         workoutRepository.deleteById(id);
     }

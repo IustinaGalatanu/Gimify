@@ -2,16 +2,15 @@ package com.example.Gymify.controller;
 
 import com.example.Gymify.model.dto.ExerciseDto;
 import com.example.Gymify.service.ExerciseService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/exercises")
+@CrossOrigin("*")
 public class ExerciseController {
 
     private final ExerciseService exerciseService;
@@ -52,7 +51,7 @@ public class ExerciseController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ExerciseDto> updateExerciseUpdate(@PathVariable Long id, @RequestBody ExerciseDto exerciseDto) {
+    public ResponseEntity<ExerciseDto> updateExercise(@PathVariable Long id, @RequestBody ExerciseDto exerciseDto) {
         ExerciseDto exerciseDtoUpdate = exerciseService.update(id,exerciseDto);
         return ResponseEntity.ok(exerciseDtoUpdate);
     }

@@ -1,5 +1,6 @@
 package com.example.Gymify.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,9 +12,8 @@ public class Exercise {
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Long id;
-    private int sets;
-    private int rep;
-    private double weight;
+    private Integer rep;
+    private Double weight;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="workout_id")
