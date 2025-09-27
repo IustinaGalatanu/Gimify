@@ -63,7 +63,7 @@ public class ExerciseService {
         return exerciseDtoList;
     }
 
-    public ExerciseDto updateType(Long id,Long exerciseTypeId ) {
+    public ExerciseDto update(Long id, Long exerciseTypeId ) {
         Exercise exercise=exerciseRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Exercise not found"));
         ExerciseType exerciseType=exerciseTypeRepository.findById(exerciseTypeId)

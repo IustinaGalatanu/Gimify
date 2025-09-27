@@ -12,6 +12,7 @@ public class Exercise {
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Long id;
+    private Integer sets;
     private Integer rep;
     private Double weight;
 

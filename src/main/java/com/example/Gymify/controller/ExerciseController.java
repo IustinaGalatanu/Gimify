@@ -46,7 +46,7 @@ public class ExerciseController {
 
     @PatchMapping("{id}/exercise-type")
     public ResponseEntity<ExerciseDto> updateExerciseType(@PathVariable Long id, @RequestParam Long exerciseTypeId) {
-        ExerciseDto exerciseDtoUpdate = exerciseService.updateType(id,exerciseTypeId);
+        ExerciseDto exerciseDtoUpdate = exerciseService.update(id,exerciseTypeId);
         return ResponseEntity.ok(exerciseDtoUpdate);
     }
 
