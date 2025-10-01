@@ -1,10 +1,9 @@
 package com.example.Gymify.controller;
 
 import com.example.Gymify.model.dto.UserDto;
-import com.example.Gymify.service.UserService;
+import com.example.Gymify.service.implementation.UserServiceImplementation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +12,10 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImplementation userService;
 
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImplementation userService) {
         this.userService = userService;
     }
 

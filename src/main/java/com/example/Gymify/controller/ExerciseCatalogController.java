@@ -1,21 +1,19 @@
 package com.example.Gymify.controller;
 
 import com.example.Gymify.model.dto.ExerciseCatalogDto;
-import com.example.Gymify.model.dto.ExerciseDto;
-import com.example.Gymify.service.ExerciseCatalogService;
+import com.example.Gymify.service.implementation.ExerciseCatalogServiceImplementation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/exercises-catalog")
+@CrossOrigin("*")
 public class ExerciseCatalogController {
 
-    private final ExerciseCatalogService exerciseCatalogService;
+    private final ExerciseCatalogServiceImplementation exerciseCatalogService;
 
-    public ExerciseCatalogController(ExerciseCatalogService exerciseCatalogService) {
+    public ExerciseCatalogController(ExerciseCatalogServiceImplementation exerciseCatalogService) {
         this.exerciseCatalogService = exerciseCatalogService;
     }
 

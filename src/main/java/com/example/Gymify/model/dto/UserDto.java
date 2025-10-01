@@ -1,7 +1,6 @@
 package com.example.Gymify.model.dto;
 
 import lombok.Data;
-
 import java.util.List;
 
 @Data

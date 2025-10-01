@@ -7,24 +7,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExerciseMapper {
 
-
-    public Exercise createFromDto(ExerciseDto exerciseDto, Workout workout, ExerciseCatalog catalog) {
-        if ("STRENGTH".equalsIgnoreCase(catalog.getType())) {
-            StrengthExercise strength = new StrengthExercise();
-            strength.setId(exerciseDto.getId());
-            strength.setWorkout(workout);
-            strength.setExerciseCatalog(catalog);
-            strength.setSets(exerciseDto.getSets());
-            strength.setRep(exerciseDto.getRep());
-            strength.setWeight(exerciseDto.getWeight());
-            return strength;
-        } else if ("CARDIO".equalsIgnoreCase(catalog.getType())) {
-            CardioExercise cardio = new CardioExercise();
-            cardio.setId(exerciseDto.getId());
-            cardio.setWorkout(workout);
-            cardio.setExerciseCatalog(catalog);
-            cardio.setDuration(exerciseDto.getDuration());
-            return cardio;
+    public Exercise createFromDto(ExerciseDto exerciseDto, Workout workout, ExerciseCatalog catalogExercise) {
+        if ("STRENGTH".equalsIgnoreCase(catalogExercise.getType())) {
+            StrengthExercise strengthExercise = new StrengthExercise();
+            strengthExercise.setId(exerciseDto.getId());
+            strengthExercise.setWorkout(workout);
+            strengthExercise.setExerciseCatalog(catalogExercise);
+            strengthExercise.setSets(exerciseDto.getSets());
+            strengthExercise.setReps(exerciseDto.getReps());
+            strengthExercise.setWeight(exerciseDto.getWeight());
+            return strengthExercise;
+        } else if ("CARDIO".equalsIgnoreCase(catalogExercise.getType())) {
+            CardioExercise cardioExercise = new CardioExercise();
+            cardioExercise.setId(exerciseDto.getId());
+            cardioExercise.setWorkout(workout);
+            cardioExercise.setExerciseCatalog(catalogExercise);
+            cardioExercise.setDuration(exerciseDto.getDuration());
+            return cardioExercise;
         }
         return null;
     }
@@ -41,7 +40,7 @@ public class ExerciseMapper {
 
        if(exercise instanceof StrengthExercise strengthExercise){
            exerciseDto.setSets(strengthExercise.getSets());
-           exerciseDto.setRep(strengthExercise.getRep());
+           exerciseDto.setReps(strengthExercise.getReps());
            exerciseDto.setWeight(strengthExercise.getWeight());
        }else if( exercise instanceof  CardioExercise cardioExercise){
            exerciseDto.setDuration(cardioExercise.getDuration());

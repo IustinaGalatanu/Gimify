@@ -1,6 +1,5 @@
 package com.example.Gymify.model.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -10,7 +9,7 @@ public class ExerciseDto {
 
     private Long id;
     private Integer sets;
-    private Integer rep;
+    private Integer reps;
     private Double weight;
     private Integer duration;
     private Long workoutId;

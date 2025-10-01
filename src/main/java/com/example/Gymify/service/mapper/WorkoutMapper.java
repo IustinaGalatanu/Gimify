@@ -6,45 +6,42 @@ import com.example.Gymify.model.dto.UserDto;
 import com.example.Gymify.model.dto.WorkoutDto;
 import com.example.Gymify.model.dto.WorkoutSummaryDto;
 import com.example.Gymify.repository.ExerciseCatalogRepository;
-import com.example.Gymify.repository.ExerciseRepository;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class WorkoutMapper {
 
-    private final ExerciseRepository exerciseRepository;
+
     private final ExerciseCatalogRepository exerciseCatalogRepository;
 
-    public WorkoutMapper(ExerciseRepository exerciseRepository, ExerciseCatalogRepository exerciseCatalogRepository) {
-        this.exerciseRepository = exerciseRepository;
+    public WorkoutMapper(ExerciseCatalogRepository exerciseCatalogRepository) {
         this.exerciseCatalogRepository = exerciseCatalogRepository;
     }
 
-    public Workout createFromDto(WorkoutDto workoutDto, User user){
+    public Workout createFromDto (WorkoutDto workoutDto, User user){
         Workout workout=new Workout();
         workout.setId(workoutDto.getId());
         workout.setName(workoutDto.getName());
         workout.setCreateTimestamp(workoutDto.getCreateTimestamp());
-        List<Exercise> exercises=exerciseFromDto(workoutDto.getExercises(),workout);
+        List<Exercise> exercises=exercisesFromDto(workoutDto.getExercises(),workout);
         workout.setExercises(exercises);
         if (exercises != null) {
-            exercises.forEach(e -> e.setWorkout(workout));
+            exercises.forEach(exercise -> exercise.setWorkout(workout));
         }
         workout.setUser(user);
         return workout;
     }
 
-    public List<Exercise> exerciseFromDto(List<ExerciseDto> exerciseDto, Workout workout){
-        if(exerciseDto!=null && !exerciseDto.isEmpty()){
-            List<Exercise> exercises= exerciseDto.stream()
-                    .filter(exDto->exDto!=null )
-                    .map(exerciseDto1 -> {
-                        ExerciseCatalog catalog = exerciseCatalogRepository.findById(exerciseDto1.getCatalogId())
-                                .orElseThrow(() -> new RuntimeException("Catalog not found: " + exerciseDto1.getCatalogId()));
-                        return exerciseFromDto(exerciseDto1, workout, catalog);
+    public List<Exercise> exercisesFromDto (List<ExerciseDto> exercisesDto, Workout workout){
+        if(exercisesDto !=null && !exercisesDto.isEmpty()){
+            List<Exercise> exercises= exercisesDto.stream()
+                    .filter(exerciseDto->exerciseDto!=null )
+                    .map(exerciseDto -> {
+                        ExerciseCatalog exerciseCatalog = exerciseCatalogRepository.findById(exerciseDto.getCatalogId())
+                                .orElseThrow(() -> new RuntimeException("Catalog not found: " + exerciseDto.getCatalogId()));
+                        return exerciseFromDto(exerciseDto, workout, exerciseCatalog);
                     })
                     .collect(Collectors.toList());
             workout.setExercises(exercises);
@@ -53,45 +50,45 @@ public class WorkoutMapper {
         return List.of();
     }
 
-    private Exercise exerciseFromDto (ExerciseDto exerciseDto, Workout workout, ExerciseCatalog catalog){
-        if ("STRENGTH".equalsIgnoreCase(catalog.getType())) {
-            StrengthExercise strength = new StrengthExercise();
-            strength.setId(exerciseDto.getId());
-            strength.setWorkout(workout);
-            strength.setExerciseCatalog(catalog);
-            strength.setSets(exerciseDto.getSets());
-            strength.setRep(exerciseDto.getRep());
-            strength.setWeight(exerciseDto.getWeight());
-            return strength;
-        } else if ("CARDIO".equalsIgnoreCase(catalog.getType())) {
-            CardioExercise cardio = new CardioExercise();
-            cardio.setId(exerciseDto.getId());
-            cardio.setWorkout(workout);
-            cardio.setExerciseCatalog(catalog);
-            cardio.setDuration(exerciseDto.getDuration());
-            return cardio;
+    private Exercise exerciseFromDto (ExerciseDto exerciseDto, Workout workout, ExerciseCatalog exerciseCatalog){
+        if ("STRENGTH".equalsIgnoreCase(exerciseCatalog.getType())) {
+            StrengthExercise strengthExercise = new StrengthExercise();
+            strengthExercise.setId(exerciseDto.getId());
+            strengthExercise.setWorkout(workout);
+            strengthExercise.setExerciseCatalog(exerciseCatalog);
+            strengthExercise.setSets(exerciseDto.getSets());
+            strengthExercise.setReps(exerciseDto.getReps());
+            strengthExercise.setWeight(exerciseDto.getWeight());
+            return strengthExercise;
+        } else if ("CARDIO".equalsIgnoreCase(exerciseCatalog.getType())) {
+            CardioExercise cardioExercise = new CardioExercise();
+            cardioExercise.setId(exerciseDto.getId());
+            cardioExercise.setWorkout(workout);
+            cardioExercise.setExerciseCatalog(exerciseCatalog);
+            cardioExercise.setDuration(exerciseDto.getDuration());
+            return cardioExercise;
         }
         return null;
     }
 
-    public User userFromDto(UserDto userDto,Workout workout){
+    public User userFromDto (UserDto userDto,Workout workout){
         User user=new User();
         user.setId(userDto.getId());
         workout.setUser(user);
         return user;
     }
 
-    public WorkoutDto toDto(Workout workout){
+    public WorkoutDto toDto (Workout workout){
         WorkoutDto workoutDto =new WorkoutDto();
         workoutDto.setId(workout.getId());
         workoutDto.setCreateTimestamp(workout.getCreateTimestamp());
         workoutDto.setName(workout.getName());
-        workoutDto.setExercises(exerciseToDtos(workout.getExercises(),workoutDto));
+        workoutDto.setExercises(exercisesToDto(workout.getExercises(),workoutDto));
         workoutDto.setUserId(workout.getUser().getId());
         return workoutDto;
     }
 
-    public WorkoutSummaryDto toSummaryDto(Workout workout){
+    public WorkoutSummaryDto toSummaryDto (Workout workout){
         WorkoutSummaryDto workoutSummaryDto=new WorkoutSummaryDto();
         workoutSummaryDto.setId(workout.getId());
         workoutSummaryDto.setName(workout.getName());
@@ -100,35 +97,35 @@ public class WorkoutMapper {
     }
 
 
-    public List<ExerciseDto> exerciseToDtos(List<Exercise> exercise,WorkoutDto workoutDto){
-        if(exercise!=null){
-            List<ExerciseDto> exercisesDtos = exercise.stream()
-                    .map(exerc->{
+    public List<ExerciseDto> exercisesToDto (List<Exercise> exercises, WorkoutDto workoutDto){
+        if(exercises !=null){
+            List<ExerciseDto> exercisesDto = exercises.stream()
+                    .map(exercise ->{
                         ExerciseDto exerciseDto =new ExerciseDto();
-                        exerciseDto.setId(exerc.getId());
-                        if (exerc.getWorkout() != null) {
-                            exerciseDto.setWorkoutId(exerc.getWorkout().getId());
+                        exerciseDto.setId(exercise.getId());
+                        if (exercise.getWorkout() != null) {
+                            exerciseDto.setWorkoutId(exercise.getWorkout().getId());
                         }
-                        if (exerc.getExerciseCatalog() != null) {
-                            exerciseDto.setCatalogId(exerc.getExerciseCatalog().getId());
+                        if (exercise.getExerciseCatalog() != null) {
+                            exerciseDto.setCatalogId(exercise.getExerciseCatalog().getId());
                         }
-                        if(exerc instanceof StrengthExercise strengthExercise){
+                        if(exercise instanceof StrengthExercise strengthExercise){
                             exerciseDto.setSets(strengthExercise.getSets());
-                            exerciseDto.setRep(strengthExercise.getRep());
+                            exerciseDto.setReps(strengthExercise.getReps());
                             exerciseDto.setWeight(strengthExercise.getWeight());
-                        }else if( exerc instanceof  CardioExercise cardioExercise){
+                        }else if( exercise instanceof  CardioExercise cardioExercise){
                             exerciseDto.setDuration(cardioExercise.getDuration());
                         }
                         return exerciseDto;
                     })
-                    .collect(Collectors.toList());
-            workoutDto.setExercises(exercisesDtos);
-            return exercisesDtos;
+                    .toList();
+            workoutDto.setExercises(exercisesDto);
+            return exercisesDto;
         }
         return List.of();
     }
 
-    public UserDto userToDto(User user,WorkoutDto workoutDto){
+    public UserDto userToDto (User user, WorkoutDto workoutDto){
         UserDto userDto=new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());

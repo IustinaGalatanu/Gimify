@@ -1,61 +1,20 @@
 package com.example.Gymify.service;
 
-import com.example.Gymify.model.Image;
-import com.example.Gymify.model.User;
 import com.example.Gymify.model.dto.UserDto;
-import com.example.Gymify.repository.ImageRepository;
-import com.example.Gymify.repository.UserRepository;
-import com.example.Gymify.service.mapper.UserMappper;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Service
-public class UserService {
 
-    private final UserRepository userRepository;
-    private final UserMappper userMappper;
-    private final ImageRepository imageRepository;
+public interface UserService {
 
-    public UserService(UserRepository userRepository, UserMappper userMappper, ImageRepository imageRepository){
-        this.userRepository = userRepository;
-        this.userMappper = userMappper;
-        this.imageRepository = imageRepository;
-    }
+    UserDto save(UserDto userDto);
 
-    public UserDto save(UserDto userDto) {
-        User user = userMappper.createFromDto(userDto);
-        User savedUser = userRepository.save(user);
-        return userMappper.toDto(savedUser);
-    }
+     Optional<UserDto> findById(Long id);
 
-    public Optional<UserDto> findById(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        Optional<UserDto> optionalUserDto = optionalUser.map(userMappper::toDto);
-        return optionalUserDto;
-    }
+     List<UserDto> findAll();
 
-    public List<UserDto> findAll() {
-        List<User> listUser= userRepository.findAll();
-        List<UserDto> listUserDto = listUser.stream()
-                .map(userMappper::toDto)
-                .collect(Collectors.toList());
-        return listUserDto;
-    }
+     UserDto update(Long userId, Long imageId);
 
-    public UserDto update(Long userId, Long imageId){
-        User user=userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("User not found"));
-        Image image = imageRepository.findById(imageId)
-                .orElseThrow(()-> new RuntimeException("Image not found"));
-        user.setImage(image);
-        User userSaved=userRepository.save(user);
-        return userMappper.toDto(userSaved);
-    }
-
-    public void delete(Long id) {
-        userRepository.deleteById(id);
-    }
+     void delete(Long id);
 }
+

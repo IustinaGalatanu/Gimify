@@ -1,0 +1,84 @@
+package com.example.Gymify.service.implementation;
+
+import com.example.Gymify.model.User;
+import com.example.Gymify.model.Workout;
+import com.example.Gymify.model.dto.WorkoutDto;
+import com.example.Gymify.model.dto.WorkoutSummaryDto;
+import com.example.Gymify.repository.UserRepository;
+import com.example.Gymify.repository.WorkoutRepository;
+import com.example.Gymify.service.WorkoutService;
+import com.example.Gymify.service.mapper.WorkoutMapper;
+import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class WorkoutServiceImplementation implements WorkoutService {
+
+    private final WorkoutRepository workoutRepository;
+    private final WorkoutMapper workoutMapper;
+    private final UserRepository userRepository;
+
+
+    public WorkoutServiceImplementation(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper, UserRepository userRepository) {
+        this.workoutRepository = workoutRepository;
+        this.workoutMapper = workoutMapper;
+        this.userRepository = userRepository;
+
+    }
+
+    public WorkoutDto save(WorkoutDto workoutDto){
+        Optional<User> optionalUser= userRepository.findById(workoutDto.getUserId());
+        if(optionalUser.isEmpty()) {
+            throw new RuntimeException("Could not create workout because user with id=" + workoutDto.getUserId() + " doesn't exist");
+        }
+        Workout workout=workoutMapper.createFromDto(workoutDto,optionalUser.get());
+        Workout savedWorkout = workoutRepository.save(workout);
+        return workoutMapper.toDto(savedWorkout);
+    }
+
+    public Optional<WorkoutDto> findById(Long id){
+        Optional<Workout> optionalWorkout = workoutRepository.findById(id);
+        Optional<WorkoutDto> optionalWorkoutDto = optionalWorkout.map(workoutMapper::toDto);
+        return optionalWorkoutDto;
+    }
+
+    public List<WorkoutDto> findAll(){
+        List<Workout> workoutsList = workoutRepository.findAll();
+        List<WorkoutDto> workoutsDtoList= workoutsList.stream()
+                .map(workoutMapper::toDto)
+                .collect(Collectors.toList());
+        return workoutsDtoList;
+    }
+
+    public List<WorkoutSummaryDto> findWorkoutByUserIdAndByDate(Long id, LocalDate date){
+        List<Workout> workoutsList = workoutRepository.findWorkoutByUserIdAndCreateTimestamp(id,date);
+        List<WorkoutSummaryDto> workoutsSummaryDtoList = workoutsList.stream()
+                .map(workoutMapper::toSummaryDto)
+                .collect(Collectors.toList());
+        return workoutsSummaryDtoList;
+    }
+
+    public List<WorkoutSummaryDto> findWorkoutByUserId(Long id) {
+        List<Workout> workoutsList = workoutRepository.findWorkoutByUserId(id);
+        List<WorkoutSummaryDto> workoutsSummaryDtoList = workoutsList.stream()
+                .map(workoutMapper::toSummaryDto)
+                .collect(Collectors.toList());
+        return workoutsSummaryDtoList;
+    }
+
+    public WorkoutDto update (Long id, String name) {
+        Workout workout=workoutRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Workout not found"));
+        workout.setName(name);
+        Workout workoutUpdate=workoutRepository.save(workout);
+        return workoutMapper.toDto(workoutUpdate);
+
+    }
+
+    public void delete(Long id){
+        workoutRepository.deleteById(id);
+    }
+}

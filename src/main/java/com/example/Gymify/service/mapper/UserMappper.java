@@ -41,16 +41,15 @@ public class UserMappper {
         return null;
     }
 
-    private List<Workout> workoutsSummaryFromDto(List<WorkoutSummaryDto> workoutSummaryDtos, User user){
+    private List<Workout> workoutsSummaryFromDto(List<WorkoutSummaryDto> workoutsSummaryDto, User user){
         // List<Workout> list = null
         // List<Workout> list = List.of(); -> []
-        if(workoutSummaryDtos !=null && !workoutSummaryDtos.isEmpty()){
-            List<Workout> workouts= workoutSummaryDtos.stream()
+        if(workoutsSummaryDto !=null && !workoutsSummaryDto.isEmpty()){
+            List<Workout> workouts= workoutsSummaryDto.stream()
                     // List<Workout> list = List.of(); -> [null, "squats", null]
                     .filter(workoutSummaryDto -> workoutSummaryDto !=null )
                     .map(workoutSummaryDto -> workoutSummaryFromDto(workoutSummaryDto,user))
-                    .collect(Collectors.toList());
-
+                    .toList();
             return workouts;
         }
         return List.of();
