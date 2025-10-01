@@ -1,6 +1,8 @@
 package com.example.Gymify.controller;
 
+import com.example.Gymify.model.dto.ExerciseCatalogDto;
 import com.example.Gymify.model.dto.ExerciseDto;
+import com.example.Gymify.service.ExerciseCatalogService;
 import com.example.Gymify.service.ExerciseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,6 @@ import java.util.Optional;
 public class ExerciseController {
 
     private final ExerciseService exerciseService;
-
 
     public ExerciseController(ExerciseService exerciseService) {
         this.exerciseService = exerciseService;
@@ -45,8 +46,8 @@ public class ExerciseController {
     }
 
     @PatchMapping("{id}/exercise-type")
-    public ResponseEntity<ExerciseDto> updateExerciseType(@PathVariable Long id, @RequestParam Long exerciseTypeId) {
-        ExerciseDto exerciseDtoUpdate = exerciseService.update(id,exerciseTypeId);
+    public ResponseEntity<ExerciseDto> updateExerciseType(@PathVariable Long id, @RequestParam Long catalogId) {
+        ExerciseDto exerciseDtoUpdate = exerciseService.update(id,catalogId);
         return ResponseEntity.ok(exerciseDtoUpdate);
     }
 

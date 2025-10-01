@@ -1,11 +1,9 @@
 package com.example.Gymify.service;
 
-import com.example.Gymify.model.ExerciseType;
 import com.example.Gymify.model.User;
 import com.example.Gymify.model.Workout;
 import com.example.Gymify.model.dto.WorkoutDto;
 import com.example.Gymify.model.dto.WorkoutSummaryDto;
-import com.example.Gymify.repository.ExerciseTypeRepository;
 import com.example.Gymify.repository.UserRepository;
 import com.example.Gymify.repository.WorkoutRepository;
 import com.example.Gymify.service.mapper.WorkoutMapper;
@@ -24,7 +22,7 @@ public class WorkoutService {
     private final UserRepository userRepository;
 
 
-    public WorkoutService(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper, UserRepository userRepository, ExerciseTypeRepository exerciseTypeRepository) {
+    public WorkoutService(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper, UserRepository userRepository) {
         this.workoutRepository = workoutRepository;
         this.workoutMapper = workoutMapper;
         this.userRepository = userRepository;

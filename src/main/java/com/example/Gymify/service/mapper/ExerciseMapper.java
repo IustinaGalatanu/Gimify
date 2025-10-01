@@ -1,37 +1,51 @@
 package com.example.Gymify.service.mapper;
 
-import com.example.Gymify.model.Exercise;
-import com.example.Gymify.model.ExerciseType;
-import com.example.Gymify.model.Workout;
+import com.example.Gymify.model.*;
 import com.example.Gymify.model.dto.ExerciseDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ExerciseMapper {
 
-    public Exercise createFromDto(ExerciseDto exerciseDto, Workout workout, ExerciseType exerciseType){
-        Exercise exercise=new Exercise();
-        exercise.setId(exerciseDto.getId());
-        exercise.setSets(exerciseDto.getSets());
-        exercise.setRep(exerciseDto.getRep());
-        exercise.setWeight(exerciseDto.getWeight());
-        exercise.setWorkout(workout);
-        exercise.setExerciseType(exerciseType);
-        return exercise;
+
+    public Exercise createFromDto(ExerciseDto exerciseDto, Workout workout, ExerciseCatalog catalog) {
+        if ("STRENGTH".equalsIgnoreCase(catalog.getType())) {
+            StrengthExercise strength = new StrengthExercise();
+            strength.setId(exerciseDto.getId());
+            strength.setWorkout(workout);
+            strength.setExerciseCatalog(catalog);
+            strength.setSets(exerciseDto.getSets());
+            strength.setRep(exerciseDto.getRep());
+            strength.setWeight(exerciseDto.getWeight());
+            return strength;
+        } else if ("CARDIO".equalsIgnoreCase(catalog.getType())) {
+            CardioExercise cardio = new CardioExercise();
+            cardio.setId(exerciseDto.getId());
+            cardio.setWorkout(workout);
+            cardio.setExerciseCatalog(catalog);
+            cardio.setDuration(exerciseDto.getDuration());
+            return cardio;
+        }
+        return null;
     }
 
     public ExerciseDto toDto(Exercise exercise){
         ExerciseDto exerciseDto =new ExerciseDto();
         exerciseDto.setId(exercise.getId());
-        exerciseDto.setSets(exercise.getSets());
-        exerciseDto.setRep(exercise.getRep());
-        exerciseDto.setWeight(exercise.getWeight());
         if (exercise.getWorkout() != null) {
             exerciseDto.setWorkoutId(exercise.getWorkout().getId());
+       }
+        if (exercise.getExerciseCatalog() != null) {
+            exerciseDto.setCatalogId(exercise.getExerciseCatalog().getId());
         }
-        if (exercise.getExerciseType() != null) {
-            exerciseDto.setExerciseTypeId(exercise.getExerciseType().getId());
-        }
+
+       if(exercise instanceof StrengthExercise strengthExercise){
+           exerciseDto.setSets(strengthExercise.getSets());
+           exerciseDto.setRep(strengthExercise.getRep());
+           exerciseDto.setWeight(strengthExercise.getWeight());
+       }else if( exercise instanceof  CardioExercise cardioExercise){
+           exerciseDto.setDuration(cardioExercise.getDuration());
+       }
         return exerciseDto;
     }
 }

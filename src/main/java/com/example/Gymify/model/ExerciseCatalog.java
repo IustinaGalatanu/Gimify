@@ -3,16 +3,13 @@ package com.example.Gymify.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
-@Data
 @Entity
-@Table(name="exercise_types")
-public class ExerciseType {
+@Data
+@Table(name = "exercise_catalog")
+public class ExerciseCatalog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     private String type;
-
-
 }

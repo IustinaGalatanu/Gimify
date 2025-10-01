@@ -1,14 +1,12 @@
 package com.example.Gymify.service.mapper;
 
-import com.example.Gymify.model.Exercise;
-import com.example.Gymify.model.ExerciseType;
-import com.example.Gymify.model.User;
-import com.example.Gymify.model.Workout;
+import com.example.Gymify.model.*;
 import com.example.Gymify.model.dto.ExerciseDto;
 import com.example.Gymify.model.dto.UserDto;
 import com.example.Gymify.model.dto.WorkoutDto;
 import com.example.Gymify.model.dto.WorkoutSummaryDto;
-import com.example.Gymify.repository.ExerciseTypeRepository;
+import com.example.Gymify.repository.ExerciseCatalogRepository;
+import com.example.Gymify.repository.ExerciseRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,10 +15,12 @@ import java.util.stream.Collectors;
 @Component
 public class WorkoutMapper {
 
-    private final ExerciseTypeRepository exerciseTypeRepository;
+    private final ExerciseRepository exerciseRepository;
+    private final ExerciseCatalogRepository exerciseCatalogRepository;
 
-    public WorkoutMapper(ExerciseTypeRepository exerciseTypeRepository) {
-        this.exerciseTypeRepository = exerciseTypeRepository;
+    public WorkoutMapper(ExerciseRepository exerciseRepository, ExerciseCatalogRepository exerciseCatalogRepository) {
+        this.exerciseRepository = exerciseRepository;
+        this.exerciseCatalogRepository = exerciseCatalogRepository;
     }
 
     public Workout createFromDto(WorkoutDto workoutDto, User user){
@@ -41,7 +41,11 @@ public class WorkoutMapper {
         if(exerciseDto!=null && !exerciseDto.isEmpty()){
             List<Exercise> exercises= exerciseDto.stream()
                     .filter(exDto->exDto!=null )
-                    .map(exerciseDto1 ->exerciseFromDto(exerciseDto1,workout))
+                    .map(exerciseDto1 -> {
+                        ExerciseCatalog catalog = exerciseCatalogRepository.findById(exerciseDto1.getCatalogId())
+                                .orElseThrow(() -> new RuntimeException("Catalog not found: " + exerciseDto1.getCatalogId()));
+                        return exerciseFromDto(exerciseDto1, workout, catalog);
+                    })
                     .collect(Collectors.toList());
             workout.setExercises(exercises);
             return exercises;
@@ -49,17 +53,25 @@ public class WorkoutMapper {
         return List.of();
     }
 
-    private Exercise exerciseFromDto (ExerciseDto exerciseDto, Workout workout){
-        Exercise exercise= new Exercise();
-        exercise.setId(exerciseDto.getId());
-        exercise.setSets(exerciseDto.getSets());
-        exercise.setRep(exerciseDto.getRep());
-        exercise.setWeight(exerciseDto.getWeight());
-        exercise.setWorkout(workout);
-        ExerciseType type=exerciseTypeRepository.findById(exerciseDto.getExerciseTypeId())
-                .orElseThrow(()->new RuntimeException("ExerciseType not found"));
-        exercise.setExerciseType(type);
-        return exercise;
+    private Exercise exerciseFromDto (ExerciseDto exerciseDto, Workout workout, ExerciseCatalog catalog){
+        if ("STRENGTH".equalsIgnoreCase(catalog.getType())) {
+            StrengthExercise strength = new StrengthExercise();
+            strength.setId(exerciseDto.getId());
+            strength.setWorkout(workout);
+            strength.setExerciseCatalog(catalog);
+            strength.setSets(exerciseDto.getSets());
+            strength.setRep(exerciseDto.getRep());
+            strength.setWeight(exerciseDto.getWeight());
+            return strength;
+        } else if ("CARDIO".equalsIgnoreCase(catalog.getType())) {
+            CardioExercise cardio = new CardioExercise();
+            cardio.setId(exerciseDto.getId());
+            cardio.setWorkout(workout);
+            cardio.setExerciseCatalog(catalog);
+            cardio.setDuration(exerciseDto.getDuration());
+            return cardio;
+        }
+        return null;
     }
 
     public User userFromDto(UserDto userDto,Workout workout){
@@ -94,11 +106,19 @@ public class WorkoutMapper {
                     .map(exerc->{
                         ExerciseDto exerciseDto =new ExerciseDto();
                         exerciseDto.setId(exerc.getId());
-                        exerciseDto.setSets(exerc.getSets());
-                        exerciseDto.setRep(exerc.getRep());
-                        exerciseDto.setWeight(exerc.getWeight());
-                        exerciseDto.setWorkoutId(exerc.getWorkout().getId());
-                        exerciseDto.setExerciseTypeId(exerc.getExerciseType().getId());
+                        if (exerc.getWorkout() != null) {
+                            exerciseDto.setWorkoutId(exerc.getWorkout().getId());
+                        }
+                        if (exerc.getExerciseCatalog() != null) {
+                            exerciseDto.setCatalogId(exerc.getExerciseCatalog().getId());
+                        }
+                        if(exerc instanceof StrengthExercise strengthExercise){
+                            exerciseDto.setSets(strengthExercise.getSets());
+                            exerciseDto.setRep(strengthExercise.getRep());
+                            exerciseDto.setWeight(strengthExercise.getWeight());
+                        }else if( exerc instanceof  CardioExercise cardioExercise){
+                            exerciseDto.setDuration(cardioExercise.getDuration());
+                        }
                         return exerciseDto;
                     })
                     .collect(Collectors.toList());
