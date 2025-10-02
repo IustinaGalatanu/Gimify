@@ -13,13 +13,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImplementation implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMappper userMappper;
     private final ImageRepository imageRepository;
 
-    public UserServiceImplementation(UserRepository userRepository, UserMappper userMappper, ImageRepository imageRepository){
+    public UserServiceImpl(UserRepository userRepository, UserMappper userMappper, ImageRepository imageRepository){
         this.userRepository = userRepository;
         this.userMappper = userMappper;
         this.imageRepository = imageRepository;
@@ -52,6 +52,14 @@ public class UserServiceImplementation implements UserService {
                 .orElseThrow(()-> new RuntimeException("Image not found"));
         user.setImage(image);
         User userSaved=userRepository.save(user);
+        return userMappper.toDto(userSaved);
+    }
+
+    public UserDto updateGoal(Long userId, String goal){
+        User user=userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+        user.setGoal(goal);
+        User userSaved =userRepository.save(user);
         return userMappper.toDto(userSaved);
     }
 

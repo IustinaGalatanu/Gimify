@@ -1,7 +1,7 @@
 package com.example.Gymify.controller;
 
 import com.example.Gymify.model.dto.ImageDto;
-import com.example.Gymify.service.implementation.ImageServiceImplementation;
+import com.example.Gymify.service.implementation.ImageServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +14,9 @@ import java.util.List;
 @CrossOrigin("*")
 public class ImageController {
 
-    private final ImageServiceImplementation imageService;
+    private final ImageServiceImpl imageService;
 
-    public ImageController(ImageServiceImplementation imageService) {
+    public ImageController(ImageServiceImpl imageService) {
         this.imageService = imageService;
     }
 

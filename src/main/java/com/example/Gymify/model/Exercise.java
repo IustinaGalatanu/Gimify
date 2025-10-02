@@ -21,5 +21,7 @@ public abstract class Exercise {
     @JoinColumn(name = "exercise_catalog_id")
     private ExerciseCatalog exerciseCatalog;
 
+    public abstract double calculateKcal();
+
 
 }

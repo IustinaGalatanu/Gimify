@@ -113,12 +113,18 @@ public class WorkoutMapper {
                             exerciseDto.setSets(strengthExercise.getSets());
                             exerciseDto.setReps(strengthExercise.getReps());
                             exerciseDto.setWeight(strengthExercise.getWeight());
+                            exerciseDto.setKcal(strengthExercise.calculateKcal());
                         }else if( exercise instanceof  CardioExercise cardioExercise){
                             exerciseDto.setDuration(cardioExercise.getDuration());
+                            exerciseDto.setKcal(cardioExercise.calculateKcal());
                         }
                         return exerciseDto;
                     })
                     .toList();
+            double totalKcal = exercisesDto.stream()
+                    .mapToDouble(exerciseDto -> exerciseDto.getKcal() != null ? exerciseDto.getKcal() : 0.0)
+                    .sum();
+            workoutDto.setTotalKcal(totalKcal);
             workoutDto.setExercises(exercisesDto);
             return exercisesDto;
         }

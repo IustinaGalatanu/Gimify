@@ -37,13 +37,14 @@ public class ExerciseMapper {
         if (exercise.getExerciseCatalog() != null) {
             exerciseDto.setCatalogId(exercise.getExerciseCatalog().getId());
         }
-
        if(exercise instanceof StrengthExercise strengthExercise){
            exerciseDto.setSets(strengthExercise.getSets());
            exerciseDto.setReps(strengthExercise.getReps());
            exerciseDto.setWeight(strengthExercise.getWeight());
+           exerciseDto.setKcal(strengthExercise.calculateKcal());
        }else if( exercise instanceof  CardioExercise cardioExercise){
            exerciseDto.setDuration(cardioExercise.getDuration());
+           exerciseDto.setKcal(cardioExercise.calculateKcal());
        }
         return exerciseDto;
     }

@@ -2,7 +2,7 @@ package com.example.Gymify.controller;
 
 import com.example.Gymify.model.dto.WorkoutDto;
 import com.example.Gymify.model.dto.WorkoutSummaryDto;
-import com.example.Gymify.service.implementation.WorkoutServiceImplementation;
+import com.example.Gymify.service.implementation.WorkoutServiceImpl;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +15,9 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class WorkoutController {
 
-    private final WorkoutServiceImplementation workoutService;
+    private final WorkoutServiceImpl workoutService;
 
-    public WorkoutController(WorkoutServiceImplementation workoutService) {
+    public WorkoutController(WorkoutServiceImpl workoutService) {
         this.workoutService = workoutService;
     }
 

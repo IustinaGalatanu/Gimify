@@ -14,4 +14,5 @@ public class WorkoutDto {
     private LocalDate createTimestamp;
     private Long userId;
     private List<ExerciseDto> exercises;
+    private Double totalKcal;
 }

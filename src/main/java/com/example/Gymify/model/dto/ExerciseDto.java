@@ -14,5 +14,6 @@ public class ExerciseDto {
     private Integer duration;
     private Long workoutId;
     private Long catalogId;
+    private Double kcal;
 
 }

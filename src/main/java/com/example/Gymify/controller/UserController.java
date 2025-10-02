@@ -1,7 +1,7 @@
 package com.example.Gymify.controller;
 
 import com.example.Gymify.model.dto.UserDto;
-import com.example.Gymify.service.implementation.UserServiceImplementation;
+import com.example.Gymify.service.implementation.UserServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class UserController {
 
-    private final UserServiceImplementation userService;
+    private final UserServiceImpl userService;
 
 
-    public UserController(UserServiceImplementation userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -42,6 +42,13 @@ public class UserController {
         UserDto userDtoUpdate=userService.update(id,imageId);
         return ResponseEntity.ok(userDtoUpdate);
     }
+
+    @PatchMapping("{id}/goal")
+    public ResponseEntity<UserDto> updateGoalForUser(@PathVariable Long id, @RequestParam String goal) {
+        UserDto userDtoUpdate=userService.updateGoal(id,goal);
+        return ResponseEntity.ok(userDtoUpdate);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id){

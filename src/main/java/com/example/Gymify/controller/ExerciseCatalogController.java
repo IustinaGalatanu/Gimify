@@ -1,7 +1,7 @@
 package com.example.Gymify.controller;
 
 import com.example.Gymify.model.dto.ExerciseCatalogDto;
-import com.example.Gymify.service.implementation.ExerciseCatalogServiceImplementation;
+import com.example.Gymify.service.implementation.ExerciseCatalogServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
 @CrossOrigin("*")
 public class ExerciseCatalogController {
 
-    private final ExerciseCatalogServiceImplementation exerciseCatalogService;
+    private final ExerciseCatalogServiceImpl exerciseCatalogService;
 
-    public ExerciseCatalogController(ExerciseCatalogServiceImplementation exerciseCatalogService) {
+    public ExerciseCatalogController(ExerciseCatalogServiceImpl exerciseCatalogService) {
         this.exerciseCatalogService = exerciseCatalogService;
     }
 

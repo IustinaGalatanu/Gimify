@@ -11,14 +11,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ExerciseServiceImplementation implements ExerciseService {
+public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseCatalogRepository exerciseCatalogRepository;
     private final ExerciseRepository exerciseRepository;
     private final ExerciseMapper exerciseMapper;
     private final WorkoutRepository workoutRepository;
 
-    public ExerciseServiceImplementation(ExerciseCatalogRepository exerciseCatalogRepository, ExerciseRepository exerciseRepository, ExerciseMapper exerciseMapper, WorkoutRepository workoutRepository){
+    public ExerciseServiceImpl(ExerciseCatalogRepository exerciseCatalogRepository, ExerciseRepository exerciseRepository, ExerciseMapper exerciseMapper, WorkoutRepository workoutRepository){
         this.exerciseCatalogRepository = exerciseCatalogRepository;
         this.exerciseRepository = exerciseRepository;
         this.exerciseMapper = exerciseMapper;
@@ -77,14 +77,13 @@ public class ExerciseServiceImplementation implements ExerciseService {
                     strengthExercise.setReps(exerciseDto.getReps());
                 if (exerciseDto.getWeight() != null)
                     strengthExercise.setWeight(exerciseDto.getWeight());
-                Exercise exerciseUpdate = exerciseRepository.save(exercise);
-                return exerciseMapper.toDto(exerciseUpdate);
         }else if(exercise instanceof CardioExercise cardioExercise){
-            if(cardioExercise.getDuration() != null){
+            if(exerciseDto.getDuration() != null){
                 cardioExercise.setDuration(exerciseDto.getDuration());
             }
         }
-       return null;
+        Exercise exerciseUpdate = exerciseRepository.save(exercise);
+        return exerciseMapper.toDto(exerciseUpdate);
     }
 
     public void delete (Long id){

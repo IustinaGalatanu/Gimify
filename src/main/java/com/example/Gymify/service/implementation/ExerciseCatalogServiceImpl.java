@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ExerciseCatalogServiceImplementation implements ExerciseCatalogService {
+public class ExerciseCatalogServiceImpl implements ExerciseCatalogService {
 
     private final ExerciseCatalogMapper exerciseCatalogMapper;
     private final ExerciseCatalogRepository exerciseCatalogRepository;
 
-    public ExerciseCatalogServiceImplementation(ExerciseCatalogMapper exerciseCatalogMapper, ExerciseCatalogRepository exerciseCatalogRepository) {
+    public ExerciseCatalogServiceImpl(ExerciseCatalogMapper exerciseCatalogMapper, ExerciseCatalogRepository exerciseCatalogRepository) {
         this.exerciseCatalogMapper = exerciseCatalogMapper;
         this.exerciseCatalogRepository = exerciseCatalogRepository;
     }

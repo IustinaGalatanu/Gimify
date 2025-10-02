@@ -10,4 +10,12 @@ import lombok.Data;
 public class CardioExercise extends Exercise{
 
     private Integer duration;
+
+    @Override
+    public double calculateKcal() {
+        if(duration== null){
+            return 0;
+        }
+        return duration*8*100/100;
+    }
 }

@@ -15,6 +15,8 @@ public interface UserService {
 
      UserDto update(Long userId, Long imageId);
 
+     UserDto updateGoal(Long userId, String goal);
+
      void delete(Long id);
 }
 

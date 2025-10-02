@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ImageServiceImplementation implements ImageService {
+public class ImageServiceImpl implements ImageService {
 
     private final ImageMapper imageMapper;
     private final ImageRepository imageRepository;
 
-    public ImageServiceImplementation(ImageMapper imageMapper, ImageRepository imageRepository) {
+    public ImageServiceImpl(ImageMapper imageMapper, ImageRepository imageRepository) {
         this.imageMapper = imageMapper;
         this.imageRepository = imageRepository;
     }

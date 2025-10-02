@@ -15,14 +15,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class WorkoutServiceImplementation implements WorkoutService {
+public class WorkoutServiceImpl implements WorkoutService {
 
     private final WorkoutRepository workoutRepository;
     private final WorkoutMapper workoutMapper;
     private final UserRepository userRepository;
 
 
-    public WorkoutServiceImplementation(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper, UserRepository userRepository) {
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper, UserRepository userRepository) {
         this.workoutRepository = workoutRepository;
         this.workoutMapper = workoutMapper;
         this.userRepository = userRepository;
