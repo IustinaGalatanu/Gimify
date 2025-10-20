@@ -77,9 +77,19 @@ This project was developed for educational and portfolio purposes, to demonstrat
 
 ---
 
-## How to Run
+##  How to Run
 
-**Requirements:** Java 21, Maven  
+### Requirements
+- **Java 21+**
+- **Maven 3.9+**
+  
+### The app will run at:
+  http://localhost:8080
+  
+### Swagger UI is automatically available once the app is running.
+
+http://localhost:8080/api
+  
 ```bash
 git clone https://github.com/<username>/Gymify.git
 cd Gymify
