@@ -88,7 +88,7 @@ This project was developed for educational and portfolio purposes, to demonstrat
   
 ### Swagger UI is automatically available once the app is running.
 
-http://localhost:8080/api
+http://localhost:8080/api](http://localhost:8080/swagger-ui/index.html
   
 ```bash
 git clone https://github.com/<username>/Gymify.git
