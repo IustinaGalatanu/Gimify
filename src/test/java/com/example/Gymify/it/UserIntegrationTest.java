@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class UserIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     void createUser_ShouldReturnCreatedUser() throws Exception {
         ResultActions resultActions =mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -62,6 +64,7 @@ public class UserIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     void getAllUsers_ShouldReturnList() throws Exception {
         User user= new User();
         user.setName("Iustina");
@@ -81,6 +84,7 @@ public class UserIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     void getAllUsers_ShouldReturnEmptyList_WhenDoesNOtExists() throws Exception {
         ResultActions resultActions=mockMvc.perform(get("/api/users")
                 .contentType(MediaType.APPLICATION_JSON));
@@ -90,6 +94,7 @@ public class UserIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     void getUserById_ShouldReturnUser_WhenExists() throws Exception {
         String response=mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,6 +109,7 @@ public class UserIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     void deleteUserById_ShouldReturnNoContent() throws Exception{
         String response = mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
