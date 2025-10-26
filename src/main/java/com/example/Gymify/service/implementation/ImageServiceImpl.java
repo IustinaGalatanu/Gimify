@@ -7,6 +7,7 @@ import com.example.Gymify.service.ImageService;
 import com.example.Gymify.service.mapper.ImageMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +27,12 @@ public class ImageServiceImpl implements ImageService {
                 .map(imageMapper::toDto)
                 .collect(Collectors.toList());
         return imagesDtoList;
+    }
+
+
+    public Optional<ImageDto> findById( Long id) {
+        Optional<Image> image=imageRepository.findById(id);
+        return image.map(imageMapper::toDto);
     }
 
 }
