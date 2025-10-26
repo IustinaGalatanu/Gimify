@@ -122,7 +122,7 @@ This project was developed for educational and portfolio purposes, to demonstrat
 
 ### Requirements
 - **Java 21+**
-- **Maven 3.9+**
+- **Maven 3.5.6+**
   
 ### The app will run at:
   http://localhost:8080
