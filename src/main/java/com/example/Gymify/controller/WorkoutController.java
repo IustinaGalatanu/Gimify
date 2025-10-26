@@ -1,11 +1,16 @@
 package com.example.Gymify.controller;
 
+import com.example.Gymify.model.User;
 import com.example.Gymify.model.dto.WorkoutDto;
 import com.example.Gymify.model.dto.WorkoutSummaryDto;
+import com.example.Gymify.repository.UserRepository;
 import com.example.Gymify.service.implementation.WorkoutServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -14,12 +19,15 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/workouts")
 @CrossOrigin("*")
+@SecurityRequirement(name="BearerAuth")
 public class WorkoutController {
 
     private final WorkoutServiceImpl workoutService;
+    public final UserRepository userRepository;
 
-    public WorkoutController(WorkoutServiceImpl workoutService) {
+    public WorkoutController(WorkoutServiceImpl workoutService, UserRepository userRepository) {
         this.workoutService = workoutService;
+        this.userRepository = userRepository;
     }
     @Operation(summary = "Create a workout")
     @PostMapping

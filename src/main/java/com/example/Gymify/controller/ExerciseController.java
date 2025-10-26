@@ -3,6 +3,7 @@ package com.example.Gymify.controller;
 import com.example.Gymify.model.dto.ExerciseDto;
 import com.example.Gymify.service.implementation.ExerciseServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/exercises")
 @CrossOrigin("*")
+@SecurityRequirement(name="BearerAuth")
 public class ExerciseController {
 
     private final ExerciseServiceImpl exerciseService;
@@ -36,7 +38,7 @@ public class ExerciseController {
         Optional<ExerciseDto> exerciseByIdToDto=exerciseService.findById(id);
         return ResponseEntity.ok(exerciseByIdToDto);
     }
-    @Operation(summary = "Get an exercise by workout id")
+    @Operation(summary = "Get exercises by workout id")
     @GetMapping("/workout/{id}")
     public ResponseEntity<List<ExerciseDto>> getExerciseByWorkoutId(@PathVariable Long id) {
         List<ExerciseDto> exerciseByWorkoutIdDto=exerciseService.findExerciseByWorkoutId(id);

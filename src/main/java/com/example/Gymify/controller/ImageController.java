@@ -3,6 +3,7 @@ package com.example.Gymify.controller;
 import com.example.Gymify.model.dto.ImageDto;
 import com.example.Gymify.service.implementation.ImageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/images")
 @CrossOrigin("*")
+@SecurityRequirement(name="BearerAuth")
 public class ImageController {
 
     private final ImageServiceImpl imageService;

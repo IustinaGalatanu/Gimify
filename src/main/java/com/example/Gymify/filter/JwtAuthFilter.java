@@ -19,7 +19,7 @@ import java.util.Collections;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private static final String SECRET_KEY = "super_secret_123456";
+    private static final String SECRET_KEY =  "super_secret_123456789123456789123456789";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -41,6 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     .build()
                     .parseClaimsJws(token)
                     .getBody()
+
                     .getSubject();
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
